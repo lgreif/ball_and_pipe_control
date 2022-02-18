@@ -9,6 +9,9 @@
 close all; clc; clear device;
 
 %% Connect to device
+str = input("What COM port do you have?",'s')
+device = serialport(str, 19200);
+
 % device = open serial communication in the proper COM port
 
 %% Parameters
