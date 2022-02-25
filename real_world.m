@@ -9,17 +9,18 @@
 close all; clc; clear device;
 
 %% Connect to device
-str = input("What COM port do you have?",'s')
-device = serialport(str, 19200);
+%str = input("What COM port do you have?",'s')
+%device = serialport(str, 19200);
 
 % device = open serial communication in the proper COM port
+device = serialport("COM10", 19200);
 
 %% Parameters
 target      = 0.5;   % Desired height of the ball [m]
 sample_rate = 0.25;  % Amount of time between controll actions [s]
 
 %% Give an initial burst to lift ball and keep in air
-% set_pwm(add_proper_args); % Initial burst to pick up ball
+set_pwm(device, 1950); % Initial burst to pick up ball
 pause(0.1) % Wait 0.1 seconds
 % set_pwm(add_proper_args); % Set to lesser value to level out somewhere in
 % the pipe
