@@ -20,11 +20,11 @@ function [distance,manual_pwm,target,deadpan] = read_data(device)
 %% Ask nicely for data
 % use the serialport() command options to write the correct letter to the
 % system (Hint: the letters are in the spec sheet)
-write(device, "S", "uint8");
+write(device, "S", "string");
 
 %% Read data
 % use the serialport() command options to read the response
-resultStr = read(device, 16, "unit8");
+resultStr = read(device, 20, "string");
 resultStrSplit = split(resultStr, ",");
 
 resultStrSplit(1) = extractBetween(resultStrSplit(1), 2, 5);
