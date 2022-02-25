@@ -12,7 +12,9 @@ function [distance,pwm,target,deadpan] = read_data(device)
 %  system
 %
 % Created by:  Kyle Naddeo 1/3/2022
-% Modified by: YOUR NAME and DATE
+% Modified by: Jack Campanella 2/24/2022
+
+% Needs to be modified and tested with ball and tube in class
 
 %% Ask nicely for data
 % use the serialport() command options to write the correct letter to the
