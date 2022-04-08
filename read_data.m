@@ -27,7 +27,7 @@ write(device, "S", "string");
 resultStr = read(device, 20, "string");
 resultStrSplit = split(resultStr, ",");
 
-resultStrSplit(1) = extractBetween(resultStrSplit(1), 2, 5);
+resultStrSplit(1) = extractBetween(resultStrSplit(1), 2, 5);%Remove semicolon
 
 %% Translate
 % translate the response to 4 doubles using str2double() and

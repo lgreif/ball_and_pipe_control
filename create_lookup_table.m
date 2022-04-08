@@ -12,19 +12,25 @@ step_size = 20;
 
 steps = start_value:step_size*-1:end_value;
 sensor_readings = zeros((start_value - end_value)/step_size + 1,1);
+pwm_out = zeros((start_value - end_value)/step_size + 1,1);
 
 % go to first step and stabilize before starting sweep
 set_pwm(device,3000);
 pause(4);
 
+j = 0;
 
 for i = steps
-    set_pwm(device,i);
-    pause(4);
-    data = read_data(device);
-    sensor_readings(i) = data(1);
+    for k = 0:16
+        j = j + 1;
+        set_pwm(device,i);
+        data = read_data(device);
+        sensor_readings(j) = data(1);
+        pwm_out(j) = i;
+        pause(0.1);
+    end
 end
-steps
+pwm_out
 sensor_readings
 values = [steps;sensor_readings]
 end
