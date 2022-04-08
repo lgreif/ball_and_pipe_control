@@ -5,7 +5,7 @@ function [values] = create_lookup_table(device)
 start_value = 2800;
 end_value = 2500;
 
-set_pwm(device, 3000); % Initial burst to pick up ball
+set_pwm(device, 4000); % Initial burst to pick up ball
 pause(0.5);
 
 step_size = 20;
@@ -15,7 +15,7 @@ sensor_readings = zeros((start_value - end_value)/step_size + 1,1);
 pwm_out = zeros((start_value - end_value)/step_size + 1,1);
 
 % go to first step and stabilize before starting sweep
-set_pwm(device,3000);
+set_pwm(device,4000);
 pause(4);
 
 j = 0;
@@ -32,5 +32,5 @@ for i = steps
 end
 pwm_out
 sensor_readings
-values = [steps;sensor_readings]
+values = [pwm_out, sensor_readings]
 end

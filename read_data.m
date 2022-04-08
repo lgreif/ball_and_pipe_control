@@ -21,6 +21,7 @@ function [distance,manual_pwm,target,deadpan] = read_data(device)
 % use the serialport() command options to write the correct letter to the
 % system (Hint: the letters are in the spec sheet)
 write(device, "S", "string");
+pause(0.1);
 
 %% Read data
 % use the serialport() command options to read the response
