@@ -11,17 +11,18 @@ close all; clc; clear device;
 %% Connect to device
 str = input("What COM port do you have?",'s')
 device = serialport(str, 19200);
+write(device, 'H', 'string')
 
 % device = open serial communication in the proper COM port
 %device = serialport("COM3", 19200);
 
 %% Parameters
-target      = 0.5;   % Desired height of the ball [m]
-sample_rate = 0.25;  % Amount of time between controll actions [s]
+target      = 0.4;   % Desired height of the ball [m]
+sample_rate = 0.01;  % Amount of time between controll actions [s]
 
 %% Give an initial burst to lift ball and keep in air
-set_pwm(device, "4000"); % Initial burst to pick up ball
-pause(0.5) % Wait 0.1 seconds
+%set_pwm(device, "4000"); % Initial burst to pick up ball
+pause(0.1) % Wait 0.1 seconds
 % set_pwm(add_proper_args); % Set to lesser value to level out somewhere in
 % the pipe
 
@@ -29,43 +30,36 @@ pause(0.5) % Wait 0.1 seconds
 % action      = ; % Same value of last set_pwm   
 error       = 0;
 error_sum   = 0;
-rollInt = zeros(5, 1);
+rollInt = zeros(10, 1);
 
 %% Feedback loop
 while true
     %% Read current height
     data = read_data(device);
     height = data(1);
+    disp(height)
     y = ir2y(height); % Convert from IR reading to distance from bottom [m]
     
     %% Calculate errors for PID controller
     error_prev = error;             % D
-    D = (error_prev - error) / 2;
     error      = target - y;        % P
-    error_sum  = error + error_sum; % I
-
-    %%Rolling integral
-    rollInt(1:end-1) = rollInt(2:end);
-    rollInt{end} = error;
+    error_sum  = -error + error_sum % I
+    D = (error_prev - error) / 0.02   % D
+    %disp(D)
     
     %% Control
     %prev_action = action;
-    action = (0.4 - error)*1875 + 2000; % Come up with a scheme no answer is right but do something
-    action = action + (sum(rollInt)*0.5); %Integral control
+    action = (0.45 - error) * 4500 + 200*D
+    %action = 1500 + -15000*D + 100*error_sum; % Come up with a scheme no answer is right but do something
+    %action = action + error_sum; %Integral control
     action = floor(action);
 
 
-%     if error > 0.4
-%         action = 2000;
-%     elseif error > 0.2
-%         action = 2500;
-%     elseif error < -0.2
-%         action = 3000;
-%     elseif error < -0.4
-%         action = 3500;
-%     else
-%         error = 2750;
-%     end
+     if action > 4000
+         action = 4000;
+     elseif action < 2000
+         action = 2000;
+     end
 
     set_pwm(device, action); % Implement action
         
