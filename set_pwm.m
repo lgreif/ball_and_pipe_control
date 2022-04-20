@@ -13,7 +13,11 @@ function action = set_pwm(device, pwm_value)
 %% Force PWM value to be valid
 %if (pwm_value > 4095 || pwm_value < 0)
 %    pwm_value = 0;  % Bound value to limits 0 to 4095
-cmd = append("P" + string(pwm_value))
+if(pwm_value == 0)
+    cmd = "P0000"
+else
+    cmd = append("P" + string(pwm_value))
+end
 
 %% Send Command
 write(device, cmd, "uint8"); % string value of pwm_value
